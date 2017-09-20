@@ -1,5 +1,4 @@
-//const fs = require('fs')
-
+// here we go...
 run('image', 'plate')
 
 /**
