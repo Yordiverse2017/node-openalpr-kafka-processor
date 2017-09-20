@@ -2,11 +2,15 @@
 
 run('image', 'plate')
 
-// console.log(`Now waiting for URLs from Kafka topic "${TOPIC_NAME_IN}"`)
-// console.log(`Identified plates will be written to kafka topic "${TOPIC_NAME_IN}"`)
-// console.log('...')
-//
-
+/**
+ * Entry point for the application.
+ * We use async/await and therefore we encapsulate the whole script
+ * into an async function.
+ *
+ * @param inputTopic
+ * @param outputTopic
+ * @returns {Promise.<void>}
+ */
 async function run(inputTopic, outputTopic) {
 
   const {consumer, producer} = await initKafka(inputTopic)
@@ -33,13 +37,17 @@ async function run(inputTopic, outputTopic) {
       console.error(e)
     }
   })
-
 }
 
 /**
  * Wrapping `producer.send` into a promise for async/await processing.
  * Note: we send a single message per call but the kafka-node API uses
  * an array of payloads.
+ *
+ * @param producer
+ * @param topicName
+ * @param message
+ * @returns {Promise}
  */
 async function sendMsgToTopic(producer, topicName, message) {
   return new Promise((resolve, reject) => {
@@ -60,7 +68,7 @@ async function sendMsgToTopic(producer, topicName, message) {
 
 /**
  * Asynchronous initialization of the OpenALPR API
- * @returns {Promise<OpenALPR, Error>}
+ * @returns {Promise<OpenALPR>}
  */
 async function initOpenALPR() {
   return new Promise((resolve, reject) => {
@@ -79,6 +87,8 @@ async function initOpenALPR() {
 }
 
 /**
+ * Higher level function that creates a "findPlate" function from
+ * the given `openalpr` instance.
  *
  * @returns {Promise.<function(*=): Promise>}
  */
@@ -102,6 +112,7 @@ async function createFindPlateFunction(openalpr) {
 }
 
 /**
+ * Init producer and consumer asynchronously.
  * @param inputTopic
  * @returns {Promise.<{consumer: *, producer: *}>}
  */
