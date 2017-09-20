@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "kafka-node": "^2.2.3",
+    "node-openalpr": "https://github.com/Sneko/node-openalpr.git"
+  },
+  "name": "node-openalpr-example",
+  "version": "1.0.0",
+  "main": "alpr-kafka-processor.js",
+  "author": "Viliam Simko",
+  "license": "MIT"
+}
